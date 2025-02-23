@@ -1,0 +1,13 @@
+﻿cmd = "gst-launch-1.0 fdsrc fd=0 \
+            ! videoparse format=i420 width=1280 height=1296 \
+            ! video/x-raw,format=I420,width=1280,height=1296 \
+            ! queue \
+            ! x264enc quantizer=0 qp-min=0 qp-max=0 dct8x8=true key-int-max=1 bitrate=50000 tune=zerolatency \
+            ! video/x-h264,profile=high \
+            ! livekitwebrtcsink name=sink \
+                signaller::ws-url=http://localhost:7880 \
+                signaller::api-key=devkey \
+                signaller::secret-key=secret \
+                signaller::room-name=my-room \
+                signaller::identity=gst-producer \
+                signaller::participant-name=gst-producer";

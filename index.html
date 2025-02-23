@@ -1,8 +1,110 @@
-<html>
-  <head>
-    <title>Benchmarking and Visualizing Compression Errors in Volumetric Streaming Systems</title>
-  </head>
-  <body>
-    <p>HotMobile '25 Demo: Benchmarking and Visualizing Compression Errors in Volumetric Streaming Systems</p>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoMeteor Studio: Project Voluminous</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="libs/three/three.min.js"></script>
+    <script defer src="libs/three/OrbitControls.js"></script>
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <a href="https://www.asu.edu" target="_blank">
+                <img src="media/logos/asulogo.png" alt="ASU Logo" class="logo asu-logo">
+            </a>
+            <div class="separator"></div>
+            <a href="https://meteor.ame.asu.edu/" target="_blank">
+                <img src="media/logos/meteorstudiologo.jpeg" alt="Meteor Studio Logo" class="logo meteor-logo">
+            </a>
+        </div>
+    </header>
+
+    <div class="content">
+        <h1>Demo: Benchmarking and Visualizing Compression Errors in Volumetric Streaming Systems</h1>
+
+        <p class="authors">
+            <span class="author">Krutik Pandya<sup>*</sup></span>, 
+            <span class="author">Flemming Laursen<sup>*</sup></span>, 
+            <span class="author">Jason Lobo<sup></sup></span>,
+            <span class="author">Gael Melo<sup></sup></span>, 
+            <span class="author">Detim Zhao<sup></sup></span>, 
+            <span class="author">Sun-Yen Tan<sup></sup></span>,
+            <span class="author">Robert LiKamWa<sup></sup></span>
+        </p>        
+        <p class="conference">Arizona State University | Meteor Studio</p>
+
+        <p class="conference">To appear in HotMobile (2025), The International Workshop on Mobile Computing Systems and Applications</p>
+
+        <div class="resource-links">
+            <a href="#" class="resource-btn">Abstract</a>
+            <a href="#" class="resource-btn">Supplementary Video</a>
+            <a href="#" class="resource-btn">Code</a>
+            <a href="#" class="resource-btn">Data</a>
+            <a href="#" class="resource-btn">Volumetric Stream</a>
+            <a href="https://meteor.ame.asu.edu/projects/" class="resource-btn">More Research</a>
+        </div>
+
+        <h2>Abstract</h2>
+        <p class="abstract">
+            Volumetric streaming transmits color and depth data in real-time over a network. 
+            While color data can be compressed effectively using standard video codecs, depth 
+            compression presents challenges due to bitrate constraints and visual artifacts. 
+            This research explores novel compression techniques that minimize artifacts while 
+            maintaining visual fidelity. Using a physical tabletop game captured by volumetric 
+            cameras, we compare uncompressed and compressed streaming workflows to analyze 
+            performance, compression quality, and system responsiveness.
+        </p>
+        
+        <h2>Supplementary Video</h2>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/kNfBMLd7cgk?si=qOWxh4PjyCaCQrik" title="Volumetric Streaming Video Demo" frameborder="0"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+        </div>
+        
+        <h2>GStreamer Command</h2>
+        <pre class="gst-code"><code>
+cmd = "gst-launch-1.0 fdsrc fd=0 \
+            ! videoparse format=i420 width=1280 height=1296 \
+            ! video/x-raw,format=I420,width=1280,height=1296 \
+            ! queue \
+            ! x264enc quantizer=0 qp-min=0 qp-max=0 dct8x8=true key-int-max=1 bitrate=50000 tune=zerolatency \
+            ! video/x-h264,profile=high \
+            ! livekitwebrtcsink name=sink \
+                signaller::ws-url=http://localhost:7880 \
+                signaller::api-key=devkey \
+                signaller::secret-key=secret \
+                signaller::room-name=my-room \
+                signaller::identity=gst-producer \
+                signaller::participant-name=gst-producer";
+        </code></pre>
+
+        <h2>Graph Data</h2>
+        <div class="carousel-container">
+            <button class="carousel-btn left-btn">❮</button>
+            <div class="carousel-wrapper">
+                <div class="carousel">
+                    <img src="media/graphs/capture_webrtc_psnr.png" alt="capture_webrtc_psnr">
+                    <img src="media/graphs/capture_webrtc_rmse.png" alt="capture_webrtc_rmse">
+                    <img src="media/graphs/capture_webrtc_ssim.png" alt="capture_webrtc_ssim">
+                </div>
+            </div>
+            <button class="carousel-btn right-btn">❯</button>
+        </div>
+
+        <h2>Volumetric Stream</h2>
+        <div class="canvas-grid">
+            <div id="canvas1" class="canvas-container">
+                <div class="canvas-label">Kinect</div>
+            </div>
+            <div id="canvas2" class="canvas-container">
+                <div class="canvas-label">WebRTC</div>
+            </div>
+        </div>        
+    </div>    
+    <script src="carousel.js"></script>
+</body>
 </html>
