@@ -267,13 +267,35 @@ h3 {
 }
 
 .canvas-container {
+    width: 380px;
+    height: 400px;
     position: relative;
-    width: 100%;
-    height: 500px; 
-    background-color: #222; 
-    border-radius: 10px;
+    border: 1px solid #ccc;
+    background: #f0f0f0;
     overflow: hidden;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.canvas-container img.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: none; 
+    z-index: 10;
+}
+
+.button-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.toggle-btn {
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 5px;
 }
 
 .canvas-label {
