@@ -20,7 +20,7 @@ h1 {
     font-size: 48px;
     margin-top: 10px;
     margin-bottom: 30px;
-    font-family: 'EB Garamond', serif;
+    font-family: sans-serif;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
@@ -34,7 +34,7 @@ h2 {
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-    font-family: 'EB Garamond', serif;
+    font-family: sans-serif;
 }
 
 h3 {
@@ -44,7 +44,7 @@ h3 {
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-    font-family: 'EB Garamond', serif;
+    font-family: sans-serif;
 }
 
 .logo-container {
@@ -82,7 +82,7 @@ h3 {
 .authors {
     font-size: 22px;
     margin-bottom: 10px;
-    font-family: 'EB Garamond', serif;
+    font-family: sans-serif;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
@@ -101,7 +101,7 @@ h3 {
     font-size: 18px;
     margin-top: 5px;
     margin-bottom: 50px;
-    font-family: 'EB Garamond', serif;
+    font-family: sans-serif;
 }
 
 .resource-links {
@@ -120,7 +120,7 @@ h3 {
     text-decoration: none;
     font-size: 16px;
     transition: 0.3s;
-    font-family: 'EB Garamond', serif;
+    font-family: sans-serif;
 }
 
 .resource-btn:hover {
@@ -133,7 +133,7 @@ h3 {
     max-width: 800px;
     text-align: left;
     margin: auto;
-    font-family: 'EB Garamond', serif;
+    font-family: sans-serif;
 }
 
 .video-container {
@@ -286,7 +286,6 @@ h3 {
         margin-top: 80px;
         margin-bottom: 10px;
         text-align: left;
-        font-family: 'EB Garamond', serif;
     }
     h3 {
         font-size: 20px;
@@ -309,7 +308,6 @@ h3 {
         font-size: 20px;
         line-height: 1.6;
         text-align: left;
-        font-family: 'EB Garamond', serif;
     }
     
     .resource-links {
@@ -374,4 +372,3 @@ h3 {
         height: 300px;
     }
 }
-
