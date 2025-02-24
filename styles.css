@@ -131,6 +131,41 @@ h3 {
     background: #333;
 }
 
+.table-of-contents {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 15px;
+}
+
+.table-of-contents h2 {
+    font-size: 34px;
+    text-align: left;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: sans-serif;
+}
+
+.table-of-contents ul {
+    padding: 15px;
+    text-align: left;
+}
+
+.table-of-contents li {
+    margin: 8px 0;
+}
+
+.table-of-contents a {
+    text-decoration: none;
+    color: #007BFF;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.table-of-contents a:hover {
+    color: #0056b3;
+}
+
 .abstract {
     font-size: 20px;
     line-height: 1.6;
