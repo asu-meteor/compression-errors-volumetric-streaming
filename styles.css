@@ -83,6 +83,9 @@ h3 {
     font-size: 22px;
     margin-bottom: 10px;
     font-family: sans-serif;
+    display: flex;
+    flex-wrap: wrap;  
+    justify-content: center;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
@@ -129,6 +132,41 @@ h3 {
 
 .resource-btn:hover {
     background: #333;
+}
+
+.table-of-contents {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 15px;
+}
+
+.table-of-contents h2 {
+    font-size: 34px;
+    text-align: left;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: sans-serif;
+}
+
+.table-of-contents ul {
+    padding: 15px;
+    text-align: left;
+}
+
+.table-of-contents li {
+    margin: 8px 0;
+}
+
+.table-of-contents a {
+    text-decoration: none;
+    color: #007BFF;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.table-of-contents a:hover {
+    color: #0056b3;
 }
 
 .abstract {
@@ -229,13 +267,35 @@ h3 {
 }
 
 .canvas-container {
+    width: 380px;
+    height: 400px;
     position: relative;
-    width: 100%;
-    height: 500px; 
-    background-color: #222; 
-    border-radius: 10px;
+    border: 1px solid #ccc;
+    background: #f0f0f0;
     overflow: hidden;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.canvas-container img.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: none; 
+    z-index: 10;
+}
+
+.button-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.toggle-btn {
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 5px;
 }
 
 .canvas-label {
