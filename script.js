@@ -1,191 +1,137 @@
-function initPointCloudScene(container) {
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x000000);
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-  const width = container.clientWidth;
-  const height = container.clientHeight;
-  const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-  camera.position.set(0, 0, 3);
-  camera.lookAt(0, 0, 0);
-
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(width, height);
-  container.appendChild(renderer.domElement);
-
-  const controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableZoom = true;
-
-  function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-  }
-  animate();
-
-  window.addEventListener("resize", () => {
-    const newWidth = container.clientWidth;
-    const newHeight = container.clientHeight;
-    camera.aspect = newWidth / newHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(newWidth, newHeight);
-  });
-
-  return { scene, camera, renderer };
-}
-
-function loadDepthImageData(imagePath) {
-  return new Promise((resolve, reject) => {
-    const textureLoader = new THREE.TextureLoader();
-    textureLoader.load(
-      imagePath,
-      (texture) => {
-        const img = texture.image;
-        const canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        resolve({ imageData, width: canvas.width, height: canvas.height });
-      },
-      undefined,
-      (err) => {
-        reject(err);
-      }
-    );
-  });
-}
-
-function createPointCloudGeometry(imageData, width, height) {
-  const data = imageData.data;
-  const positions = [];
-  const colors = [];
-
-  const fx = 525;
-  const fy = 525;
-  const cx = width / 2;
-  const cy = height / 2;
-  const maxDepth = 10;
-
-  for (let v = 0; v < height; v++) {
-    for (let u = 0; u < width; u++) {
-      const index = (v * width + u) * 4;
-      const depthIntensity = data[index] / 255; 
-      const z = depthIntensity * maxDepth;
-      const x = ((u - cx) * z) / fx;
-      const y = ((v - cy) * z) / fy;
-      positions.push(x, -y, z);
-      colors.push(depthIntensity, depthIntensity, depthIntensity);
+const imagePaths = {
+    canvas1: {
+        msb: "media/msblsb/msb.png",
+        lsb: "media/msblsb/lsb.png"
+    },
+    canvas2: {
+        msb: "media/msblsb/msb.png",
+        lsb: "media/msblsb/lsb.png"
     }
-  }
+};
 
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(new Float32Array(positions), 3)
-  );
-  geometry.setAttribute(
-    "color",
-    new THREE.BufferAttribute(new Float32Array(colors), 3)
-  );
-  return geometry;
+const fx = 504.135, fy = 504.129;
+const cx = 324.466, cy = 327.652;
+const depthScale = 1 / 1000; 
+
+function createScene(canvasId) {
+    const container = document.getElementById(canvasId);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.z = 0.1;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.1;
+    controls.rotateSpeed = 1.5;
+    controls.zoomSpeed = 2.0;
+    controls.panSpeed = 1.2;
+    controls.enablePan = true;
+    controls.minDistance = 0.05;
+    controls.maxDistance = 2000;
+
+    controls.touches = {
+        ONE: THREE.TOUCH.ROTATE,
+        TWO: THREE.TOUCH.DOLLY_PAN 
+    };
+
+    controls.touchRotateSpeed = 2.0;
+    controls.touchZoomSpeed = 2.0;
+    controls.touchPanSpeed = 1.5;  
+
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener("resize", () => {
+        const newWidth = container.clientWidth;
+        const newHeight = container.clientHeight;
+        camera.aspect = newWidth / newHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newWidth, newHeight);
+    });
+
+    return { scene, camera, renderer };
 }
 
+const scenes = {
+    canvas1: createScene("canvas1"),
+    canvas2: createScene("canvas2")
+};
 
-function init() {
-  const canvasIds = ["canvas1", "canvas2"];
-  const depthImages = [
-    "media/capture/depth/depth_1.png",
-    "media/test_only/depth_frame_0006.png"
-  ];
-  const scenes = [];
-  const fixedColors = [0x00ff00, 0xff0000]; 
+function loadImage(imagePath) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = imagePath;
+    });
+}
 
-  canvasIds.forEach((id, index) => {
-    const container = document.getElementById(id);
-    const sceneObj = initPointCloudScene(container);
-    scenes.push(sceneObj);
+async function loadPointCloud(canvasId) {
+    const { msb, lsb } = imagePaths[canvasId];
 
-    loadDepthImageData(depthImages[index])
-      .then(({ imageData, width, height }) => {
-        const geometry = createPointCloudGeometry(imageData, width, height);
+    try {
+        const [msbImg, lsbImg] = await Promise.all([loadImage(msb), loadImage(lsb)]);
+
+        const width = msbImg.width;
+        const height = msbImg.height;
+
+        const canvasMSB = document.createElement("canvas");
+        canvasMSB.width = width;
+        canvasMSB.height = height;
+        const ctxMSB = canvasMSB.getContext("2d");
+        ctxMSB.drawImage(msbImg, 0, 0, width, height);
+        const msbData = ctxMSB.getImageData(0, 0, width, height).data;
+
+        const canvasLSB = document.createElement("canvas");
+        canvasLSB.width = width;
+        canvasLSB.height = height;
+        const ctxLSB = canvasLSB.getContext("2d");
+        ctxLSB.drawImage(lsbImg, 0, 0, width, height);
+        const lsbData = ctxLSB.getImageData(0, 0, width, height).data;
+
+        const points = [];
+        for (let v = 0; v < height; v++) {
+            for (let u = 0; u < width; u++) {
+                const idx = (v * width + u) * 4;
+                const msb = msbData[idx];
+                const lsb = lsbData[idx]; 
+                const depthValue = msb * 256 + lsb;
+                const z = depthValue * depthScale;
+                if (z > 0) {
+                    const x = ((u - cx) * z) / fx;
+                    const y = -((v - cy) * z) / fy;
+                    points.push(x, y, z);
+                }
+            }
+        }
+
+        const pointsArray = new Float32Array(points);
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute("position", new THREE.BufferAttribute(pointsArray, 3));
+
         const material = new THREE.PointsMaterial({
-          size: 0.005, 
-          color: new THREE.Color(fixedColors[index]),
-          vertexColors: false,
+            color: canvasId === "canvas1" ? 0x8C1D40 : 0xFFC627, 
+            size: 0.0005
         });
+
         const pointCloud = new THREE.Points(geometry, material);
-        sceneObj.scene.add(pointCloud);
-        console.log(`Point cloud added to ${id}`);
-      })
-      .catch((err) => {
-        console.error(`Error loading depth image for ${id}:`, err);
-      });
-  });
+        pointCloud.scale.z = -1;
+        scenes[canvasId].scene.add(pointCloud);
+    } catch (err) {
+        console.error(`Error loading images for ${canvasId}:`, err);
+    }
 }
 
-init();
-
-document.addEventListener("DOMContentLoaded", function () {
-  const btnColor = document.getElementById("btnColor");
-  const btnDepth = document.getElementById("btnDepth");
-  const btnPointCloud = document.getElementById("btnPointCloud");
-
-  const canvas1 = document.getElementById("canvas1");
-  const canvas2 = document.getElementById("canvas2");
-
-  const colorImages = {
-      canvas1: "media/logos/asulogo.png",
-      canvas2: "media/logos/meteorstudiologo.jpeg",
-  };
-
-  const depthImages = {
-      canvas1: "media/test_only/depth_frame_0006.png",
-      canvas2: "media/test_only/depth_frame_0006.png",
-  };
-
-  function showOverlay(imageSrc, canvas) {
-      let overlay = canvas.querySelector(".overlay");
-      if (!overlay) {
-          overlay = document.createElement("img");
-          overlay.classList.add("overlay");
-          canvas.appendChild(overlay);
-      }
-      overlay.src = imageSrc;
-      overlay.style.display = "block";
-  }
-
-  function removeOverlay(canvas) {
-      const overlay = canvas.querySelector(".overlay");
-      if (overlay) {
-          overlay.style.display = "none";
-      }
-  }
-
-  btnColor.addEventListener("click", function () {
-      showOverlay(colorImages.canvas1, canvas1);
-      showOverlay(colorImages.canvas2, canvas2);
-
-      btnColor.style.display = "none";
-      btnDepth.style.display = "none";
-      btnPointCloud.style.display = "inline-block";
-  });
-
-  btnDepth.addEventListener("click", function () {
-      showOverlay(depthImages.canvas1, canvas1);
-      showOverlay(depthImages.canvas2, canvas2);
-
-      btnColor.style.display = "none"; 
-      btnDepth.style.display = "none"; 
-      btnPointCloud.style.display = "inline-block"; 
-  });
-
-  btnPointCloud.addEventListener("click", function () {
-      removeOverlay(canvas1);
-      removeOverlay(canvas2);
-
-      btnPointCloud.style.display = "none";
-      btnColor.style.display = "inline-block"; 
-      btnDepth.style.display = "inline-block"; 
-  });
-});
+loadPointCloud("canvas1");
+loadPointCloud("canvas2");

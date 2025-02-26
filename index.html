@@ -7,9 +7,17 @@
     <link rel="stylesheet" href="styles.css">
     <script defer src="libs/three/three.min.js"></script>
     <script defer src="libs/three/OrbitControls.js"></script>
-    <script defer src="script.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/"
+      }
+    }
+  </script>
 </head>
 <body>
+
     <header>
         <div class="logo-container">
             <a href="https://www.asu.edu" target="_blank">
@@ -27,30 +35,32 @@
 
         <p class="authors">
             <span class="author">
-                <a href="https://www.linkedin.com/in/kpandya8/" target="_blank">Krutik Pandya<sup>*</sup></a>
-            </span>, 
+                <a href="https://www.linkedin.com/in/kpandya8/" target="_blank">Krutik Pandya</a>
+            </span>,&nbsp;
             <span class="author">
-                <a href="https://www.linkedin.com/in/flemming-laursen-aab80b13/" target="_blank">Flemming Laursen<sup>*</sup></a>
-            </span>, 
+                <a href="https://www.linkedin.com/in/flemming-laursen-aab80b13/" target="_blank">Flemming Laursen</a>
+            </span>,&nbsp;
             <span class="author">
                 <a href="https://www.linkedin.com/in/iamjasonlobo/" target="_blank">Jason Lobo</a>
-            </span>,
+            </span>,&nbsp;
             <span class="author">
                 <a href="https://www.linkedin.com/in/gaelmelo/" target="_blank">Gael Melo</a>
-            </span>, 
+            </span>,&nbsp;
             <span class="author">
                 <a href="https://www.linkedin.com/in/detimzhao/" target="_blank">Detim Zhao</a>
-            </span>, 
+            </span>,&nbsp;
             <span class="author">
                 <a href="https://www.linkedin.com/in/sunyentan/" target="_blank">Sun-Yen Tan</a>
-            </span>,
+            </span>, and&nbsp;
             <span class="author">
-                <a href="https://www.linkedin.com/in/robert-likamwa-a8b64918/" target="_blank">Robert LiKamWa<sup>*</sup></a>
+                <a href="https://www.linkedin.com/in/robert-likamwa-a8b64918/" target="_blank">Dr. Robert LiKamWa</a>
             </span>
-        </p>           
-        <p class="conference">Arizona State University | Meteor Studio</p>
+        </p>
+          
 
-        <p class="conference">To appear in HotMobile (2025), The International Workshop on Mobile Computing Systems and Applications</p>
+        <p class="conference">Arizona State University, Tempe, Arizona</p>
+
+        <p class="conference">To appear in HotMobile (2025), The International Workshop on Mobile Computing Systems and Applications in Palm Springs, CA.</p>
 
         <div class="resource-links">
             <a href="#" class="resource-btn" target="_blank">GitHub</a>
@@ -64,9 +74,12 @@
             <ul>
                 <li><a href="#abstract">Abstract</a></li>
                 <li><a href="#video">Supplementary Video</a></li>
+                <li><a href="#streaming-system">Modular Volumetric Streaming System</a></li>
                 <li><a href="#gstreamer">GStreamer Command</a></li>
-                <li><a href="#graph-data">Graph Data</a></li>
-                <li><a href="#volumetric-stream">Volumetric Stream</a></li>
+                <li><a href="#graph-data">Example Benchmarking Views</a></li>
+                <li><a href="#Observable-Compression-Errors">Observable Compression Errors</a></li>
+                <li><a href="#references">References</a></li>
+                <li><a href="#acknowledgments">Acknowledgments</a></li>
             </ul>
         </div>        
 
@@ -87,43 +100,65 @@
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen></iframe>
         </div>
-        
-        <h2 id="gstreamer">GStreamer Command</h2>
-        <pre class="gst-code"><code>
-cmd = "gst-launch-1.0 fdsrc fd=0 \
-            ! videoparse format=i420 width=1280 height=1296 \
-            ! video/x-raw,format=I420,width=1280,height=1296 \
-            ! queue \
-            ! x264enc quantizer=0 qp-min=0 qp-max=0 dct8x8=true key-int-max=1 bitrate=50000 tune=zerolatency \
-            ! video/x-h264,profile=high \
-            ! livekitwebrtcsink name=sink \
-                signaller::ws-url=http://localhost:7880 \
-                signaller::api-key=devkey \
-                signaller::secret-key=secret \
-                signaller::room-name=my-room \
-                signaller::identity=gst-producer \
-                signaller::participant-name=gst-producer";
-        </code></pre>
 
-        <h2 id="graph-data">Graph Data</h2>
+        <h2 id="streaming-system">Modular Volumetric Streaming System</h2>
+
+        <div class="scroll-container">
+            <button class="scroll-btn cm-left-btn">❮</button>
+            <div class="scroll-wrapper">
+                <img src="media/map/conceptmap.png" alt="Modular Volumetric Streaming System" class="scroll-image">
+            </div>
+            <button class="scroll-btn cm-right-btn">❯</button>
+        </div>
+        
+        <h2 id="gstreamer">Adjustable Streaming Parameters</h2>
+        <pre class="gst-code">
+cmd = "gst-launch-1.0 fdsrc fd=0 \
+    ! videoparse format=i420 <span class="tooltip" data-description="Resolution: The total number of pixels or points within a volumetric frame.">width=1280 height=1296</span> \
+    ! video/x-raw,format=I420,<span class="tooltip" data-description="Resolution: The total number of pixels or points within a volumetric frame.">width=1280,height=1296</span> \
+    ! queue \
+    ! x264enc quantizer=0 qp-min=0 qp-max=0 dct8x8=true key-int-max=1 <span class="tooltip" data-description="Bitrate: The rate at which data is transmitted per second.">bitrate=50000</span> tune=zerolatency \
+    ! video/x-h264,<span class="tooltip" data-description="Video Codecs: Compression algorithms designed to encode and decode video streams efficiently.">profile=high</span> \
+    ! livekitwebrtcsink name=sink \
+        signaller::ws-url=http://localhost:7880 \
+        signaller::api-key=devkey \
+        signaller::secret-key=secret \
+        signaller::room-name=my-room \
+        signaller::identity=gst-producer \
+        signaller::participant-name=gst-producer";
+        </pre>
+        <div id="parameter-description" class="description-box">Hover or click over a parameter to see its definition.</div>
+
+        <h2 id="graph-data">Example Benchmarking Views</h2>
         <div class="carousel-container">
             <button class="carousel-btn left-btn">❮</button>
             <div class="carousel-wrapper">
                 <div class="carousel">
-                    <img src="media/graphs/capture_webrtc_psnr.png" alt="capture_webrtc_psnr">
-                    <img src="media/graphs/capture_webrtc_rmse.png" alt="capture_webrtc_rmse">
-                    <img src="media/graphs/capture_webrtc_ssim.png" alt="capture_webrtc_ssim">
+                    <div class="carousel-slide">
+                        <img src="media/e-b-views/latency_final.png">
+                        <p class="carousel-caption">Visualize streaming network performance: End-to-end latency</p>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="media/e-b-views/rmse_2d.png">
+                        <p class="carousel-caption">Data Compression: 2D RMSE on Depth (raw) and post WebRTC Depth</p>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="media/e-b-views/rmse_3d.png">
+                        <p class="carousel-caption">Data Compression: 3D RMSE on Depth (raw) and post WebRTC Depth</p>
+                    </div>
                 </div>
             </div>
             <button class="carousel-btn right-btn">❯</button>
         </div>
+            
 
-        <h2 id="volumetric-stream">Volumetric Stream</h2>
+        <h2 id="Observable-Compression-Errors">Observable Compression Errors</h2>
         <div class="button-container">
             <button id="btnColor" class="toggle-btn">Color</button>
             <button id="btnDepth" class="toggle-btn">Depth</button>
             <button id="btnPointCloud" class="toggle-btn" style="display: none;">Back</button>
-        </div>        
+        </div>
+
         <div class="canvas-grid">
             <div id="canvas1" class="canvas-container">
                 <div class="canvas-label">Kinect</div>
@@ -131,8 +166,57 @@ cmd = "gst-launch-1.0 fdsrc fd=0 \
             <div id="canvas2" class="canvas-container">
                 <div class="canvas-label">WebRTC</div>
             </div>
-        </div>        
-    </div>    
-    <script src="carousel.js"></script>
+            <div id="canvas3" class="canvas-container">
+                <div class="canvas-label">WebSocket</div>
+            </div>
+            <div id="canvas4" class="canvas-container">
+                <div class="canvas-label">WebRTC</div>
+            </div>
+        </div>
+
+        <h2 id="references">References</h2>
+        <p class="references">
+            1. Matti Siekkinen and Teemu Kämäräinen. 2023. Neural Network Assisted Depth Map 
+            Packing for Compression Using Standard Hardware Video Codecs. <i>ACM Transactions on 
+            Multimedia Computing, Communications, and Applications</i>, 19(5s), Article 174 (June 2023), 
+            20 pages. <a href="https://doi.org/10.1145/3588440" target="_blank">https://doi.org/10.1145/3588440</a>
+        </p>
+
+        <p class="references">
+            2. Venkatesh Kodukula, Alexander Shearer, Van Nguyen, Srinivas Lingutla, Yifei Liu, 
+            and Robert LiKamWa. 2021. Rhythmic pixel regions: multi-resolution visual sensing 
+            system towards high-precision visual computing at low power. In Proceedings of the 
+            <i>26th ACM International Conference on Architectural Support for Programming Languages 
+            and Operating Systems (ASPLOS '21)</i>. Association for Computing Machinery, New York, NY, 
+            USA, 573–586. <a href="https://doi.org/10.1145/3445814.3446737" target="_blank">https://doi.org/10.1145/3445814.3446737</a>
+        </p>
+
+        <p class="references">
+            3. NVIDIA. "CloudXR: Untethered Streaming for AR and VR Over 5G and Wi-Fi." NVIDIA 
+            Resources. Available at: <a href="https://resources.nvidia.com/en-us-telco-edge-ai-opportunities/cloud-xr-web-page" 
+            target="_blank">CloudXR Web Page</a>
+        </p>
+
+
+        <h2 id="acknowledgments">Acknowledgments</h2>
+        <p class="abstract">
+            This material is based upon work supported by the National Science Foundation under 
+            Grant No. 1942844. The research was sponsored by the Army Research Laboratory and was 
+            accomplished under Cooperative Agreement Number W911NF-23-2-0225.
+        </p>
+
+        <div class="logo-container">
+            <a href="https://www.asu.edu" target="_blank">
+                <img src="media/logos/asulogo.png" alt="ASU Logo" class="logo asu-logo">
+            </a>
+            <div class="separator"></div>
+            <a href="https://meteor.ame.asu.edu/" target="_blank">
+                <img src="media/logos/meteorstudiologo.jpeg" alt="Meteor Studio Logo" class="logo meteor-logo">
+            </a>
+        </div>
+
+<script src="script.js" type="module"></script>
+<script src="functions.js"></script>
+
 </body>
 </html>
