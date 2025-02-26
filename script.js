@@ -28,8 +28,22 @@ function createScene(canvasId) {
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
+    controls.dampingFactor = 0.1;
+    controls.rotateSpeed = 1.5;
+    controls.zoomSpeed = 2.0;
+    controls.panSpeed = 1.2;
+    controls.enablePan = true;
     controls.minDistance = 0.05;
     controls.maxDistance = 2000;
+
+    controls.touches = {
+        ONE: THREE.TOUCH.ROTATE,
+        TWO: THREE.TOUCH.DOLLY_PAN 
+    };
+
+    controls.touchRotateSpeed = 2.0;
+    controls.touchZoomSpeed = 2.0;
+    controls.touchPanSpeed = 1.5;  
 
     function animate() {
         requestAnimationFrame(animate);
