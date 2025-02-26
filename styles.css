@@ -51,28 +51,39 @@ h3 {
     display: flex;
     align-items: center;
     gap: 15px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .logo {
     height: 50px;
     width: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .asu-logo {
     height: 40px;
     width: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .meteor-logo {
     height: 78px;
     padding-bottom: 10px;
     width: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .separator {
     width: 2px;
     height: 50px;
     background: #8C1D40;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .content {
@@ -89,7 +100,6 @@ h3 {
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-    color: #3273dc;
 }
 
 .author {
@@ -105,6 +115,10 @@ h3 {
     margin-top: 5px;
     margin-bottom: 50px;
     font-family: sans-serif;
+    flex-wrap: wrap;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .resource-links {
@@ -137,19 +151,16 @@ h3 {
 .table-of-contents {
     max-width: 800px;
     margin: 20px auto;
-    padding: 15px;
+    margin-bottom: 10px;
 }
 
 .table-of-contents h2 {
-    font-size: 34px;
-    text-align: left;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    font-family: sans-serif;
+    margin-bottom: 10px !important; 
 }
 
 .table-of-contents ul {
+    margin-top: 10px !important;
+    padding-top: 0 !important;
     padding: 15px;
     text-align: left;
 }
@@ -161,7 +172,7 @@ h3 {
 .table-of-contents a {
     text-decoration: none;
     color: #007BFF;
-    font-size: 16px;
+    font-size: 20px;
     transition: color 0.3s ease;
 }
 
@@ -190,6 +201,58 @@ h3 {
     max-width: 800px;
 }
 
+.scroll-container {
+    position: relative;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+}
+
+.scroll-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.scroll-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.scroll-image {
+    width: 200%; 
+    max-width: none;
+}
+
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 10;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.scroll-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.cm-left-btn {
+    left: 10px;
+}
+
+.cm-right-btn {
+    right: 10px;
+}
+
 .gst-code {
     background-color: #f5f5f5;
     color: #000000;
@@ -203,6 +266,29 @@ h3 {
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     overflow-x: auto; 
+}
+
+.tooltip {
+    cursor: pointer;
+    color: #8C1D40; 
+    font-weight: bold;
+    border-bottom: 1px dotted #8C1D40;
+}
+
+.description-box {
+    margin-top: 15px;
+    padding: 10px 15px;
+    font-size: 16px;
+    background: #f8f9fa;
+    color: #333;
+    border-radius: 5px;
+    text-align: center;
+    font-family: sans-serif;
+    max-width: 760px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .carousel-container {
@@ -257,7 +343,8 @@ h3 {
 }
 
 .canvas-grid {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     justify-content: center; 
     align-items: center; 
     gap: 20px; 
@@ -284,6 +371,26 @@ h3 {
     object-fit: contain;
     display: none; 
     z-index: 10;
+}
+
+.references {
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: left;
+    max-width: 800px;
+    margin: auto;
+    font-family: sans-serif;
+    margin-bottom: 10px;
+}
+
+.references a {
+    color: #007BFF;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+.references a:hover {
+    color: #0056b3;
 }
 
 .button-container {
