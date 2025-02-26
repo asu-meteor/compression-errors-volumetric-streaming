@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meteor Studio: Project Voluminous</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="libs/three/three.min.js"></script>
+    <script defer src="libs/three/OrbitControls.js"></script>
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <a href="https://www.asu.edu" target="_blank">
+                <img src="media/logos/asulogo.png" alt="ASU Logo" class="logo asu-logo">
+            </a>
+            <div class="separator"></div>
+            <a href="https://meteor.ame.asu.edu/" target="_blank">
+                <img src="media/logos/meteorstudiologo.jpeg" alt="Meteor Studio Logo" class="logo meteor-logo">
+            </a>
+        </div>
+    </header>
+
+    <div class="content">
+        <h1>Demo: Benchmarking and Visualizing Compression Errors in Volumetric Streaming Systems</h1>
+
+        <p class="authors">
+            <span class="author">
+                <a href="https://www.linkedin.com/in/kpandya8/" target="_blank">Krutik Pandya<sup></sup></a>
+            </span>, 
+            <span class="author">
+                <a href="https://www.linkedin.com/in/flemming-laursen-aab80b13/" target="_blank">Flemming Laursen<sup></sup></a>
+            </span>, 
+            <span class="author">
+                <a href="https://www.linkedin.com/in/iamjasonlobo/" target="_blank">Jason Lobo</a>
+            </span>,
+            <span class="author">
+                <a href="https://www.linkedin.com/in/gaelmelo/" target="_blank">Gael Melo</a>
+            </span>, 
+            <span class="author">
+                <a href="https://www.linkedin.com/in/detimzhao/" target="_blank">Detim Zhao</a>
+            </span>, 
+            <span class="author">
+                <a href="https://www.linkedin.com/in/sunyentan/" target="_blank">Sun-Yen Tan</a>
+            </span>,
+            <span class="author">
+                <a href="https://www.linkedin.com/in/robert-likamwa-a8b64918/" target="_blank">Dr. Robert LiKamWa<sup></sup></a>
+            </span>
+        </p>           
+        <p class="conference">Arizona State University, Tempe, Arizona</p>
+
+        <p class="conference">To appear in HotMobile (2025), The International Workshop on Mobile Computing Systems and Applications</p>
+
+        <div class="resource-links">
+            <a href="#" class="resource-btn" target="_blank">GitHub</a>
+            <a href="media/text/poster.pdf" class="resource-btn" target="_blank">Poster</a>
+            <a href="#" class="resource-btn" target="_blank">Google Drive</a>
+            <a href="https://meteor.ame.asu.edu/projects/" class="resource-btn" target="_blank">More Research</a>
+        </div>
+
+        <div class="table-of-contents">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#abstract">Abstract</a></li>
+                <li><a href="#video">Supplementary Video</a></li>
+                <li><a href="#gstreamer">GStreamer Command</a></li>
+                <li><a href="#graph-data">Graph Data</a></li>
+                <li><a href="#volumetric-stream">Volumetric Stream</a></li>
+            </ul>
+        </div>        
+
+        <h2 id="abstract">Abstract</h2>
+        <p class="abstract">
+            Volumetric streaming transmits color and depth data in real-time over a network. 
+            While color data can be compressed effectively using standard video codecs, depth 
+            compression presents challenges due to bitrate constraints and visual artifacts. 
+            This research explores novel compression techniques that minimize artifacts while 
+            maintaining visual fidelity. Using a physical tabletop game captured by volumetric 
+            cameras, we compare uncompressed and compressed streaming workflows to analyze 
+            performance, compression quality, and system responsiveness.
+        </p>
+        
+        <h2 id="video">Supplementary Video</h2>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/kNfBMLd7cgk?si=qOWxh4PjyCaCQrik" title="Volumetric Streaming Video Demo" frameborder="0"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+        </div>
+        
+        <h2 id="gstreamer">GStreamer Command</h2>
+        <pre class="gst-code"><code>
+cmd = "gst-launch-1.0 fdsrc fd=0 \
+            ! videoparse format=i420 width=1280 height=1296 \
+            ! video/x-raw,format=I420,width=1280,height=1296 \
+            ! queue \
+            ! x264enc quantizer=0 qp-min=0 qp-max=0 dct8x8=true key-int-max=1 bitrate=50000 tune=zerolatency \
+            ! video/x-h264,profile=high \
+            ! livekitwebrtcsink name=sink \
+                signaller::ws-url=http://localhost:7880 \
+                signaller::api-key=devkey \
+                signaller::secret-key=secret \
+                signaller::room-name=my-room \
+                signaller::identity=gst-producer \
+                signaller::participant-name=gst-producer";
+        </code></pre>
+
+        <h2 id="graph-data">Graph Data</h2>
+        <div class="carousel-container">
+            <button class="carousel-btn left-btn">❮</button>
+            <div class="carousel-wrapper">
+                <div class="carousel">
+                    <img src="media/graphs/capture_webrtc_psnr.png" alt="capture_webrtc_psnr">
+                    <img src="media/graphs/capture_webrtc_rmse.png" alt="capture_webrtc_rmse">
+                    <img src="media/graphs/capture_webrtc_ssim.png" alt="capture_webrtc_ssim">
+                </div>
+            </div>
+            <button class="carousel-btn right-btn">❯</button>
+        </div>
+
+        <h2 id="volumetric-stream">Volumetric Stream</h2>
+        <div class="button-container">
+            <button id="btnColor" class="toggle-btn">Color</button>
+            <button id="btnDepth" class="toggle-btn">Depth</button>
+            <button id="btnPointCloud" class="toggle-btn" style="display: none;">Back</button>
+        </div>        
+        <div class="canvas-grid">
+            <div id="canvas1" class="canvas-container">
+                <div class="canvas-label">Kinect</div>
+            </div>
+            <div id="canvas2" class="canvas-container">
+                <div class="canvas-label">WebRTC</div>
+            </div>
+        </div>        
+    </div>    
+    <script src="carousel.js"></script>
+</body>
+</html>
