@@ -346,7 +346,8 @@ h3 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-    max-width: 800px;
+    max-width: 800px; 
+    width: 100%;
     margin: 0 auto;
     justify-content: center;
 }
@@ -358,8 +359,8 @@ h3 {
 }
 
 .video-canvas {
-    width: 100%;
-    max-width: 380px;
+    width: 100%; 
+    max-width: 380px; 
     height: auto;
     border: 1px solid #ccc;
     background: #000;
