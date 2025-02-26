@@ -63,7 +63,7 @@
         <p class="conference">To appear in HotMobile (2025), The International Workshop on Mobile Computing Systems and Applications in Palm Springs, CA.</p>
 
         <div class="resource-links">
-            <a href="#" class="resource-btn" target="_blank">GitHub (Coming Soon)</a>
+            <a href="" class="resource-btn">GitHub (Coming Soon)</a>
             <a href="media/text/abstract.pdf" class="resource-btn" target="_blank">Abstract</a>
             <a href="media/text/poster.pdf" class="resource-btn" target="_blank">Poster</a>
             <!-- <a href="#" class="resource-btn" target="_blank">Google Drive</a> -->
@@ -79,6 +79,7 @@
                 <li><a href="#gstreamer">Adjustable Streaming Parameters</a></li>
                 <li><a href="#graph-data">Example Benchmarking Views</a></li>
                 <li><a href="#Observable-Compression-Errors">Observable Compression Errors</a></li>
+                <!-- <li><a href="#kinectvswebrtc">Kinect VS WebRTC</a></li> -->
                 <li><a href="#references">References</a></li>
                 <li><a href="#acknowledgments">Acknowledgments</a></li>
             </ul>
@@ -97,7 +98,7 @@
         
         <h2 id="video">Supplementary Video</h2>
         <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/kNfBMLd7cgk?si=qOWxh4PjyCaCQrik" title="Volumetric Streaming Video Demo" frameborder="0"
+            <iframe src="https://www.youtube.com/embed/3xYllBk5-lg?si=IkT9yNKnikVTJSPt" title="Volumetric Streaming Video Demo" frameborder="0"
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen></iframe>
         </div>
@@ -151,15 +152,45 @@ cmd = "gst-launch-1.0 fdsrc fd=0 \
             </div>
             <button class="carousel-btn right-btn">❯</button>
         </div>
-            
-
+        
         <h2 id="Observable-Compression-Errors">Observable Compression Errors</h2>
+        <div class="video-grid">
+            <div class="video-item">
+                <video class="video-canvas" id="video1" loop autoplay muted>
+                    <source src="media/videos/a.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p class="video-caption">(a) Visible convex depth cone-like artifacts appear when adjusting quantization values.</p>
+            </div>
+            <div class="video-item">
+                <video class="video-canvas" id="video2" loop autoplay muted>
+                    <source src="media/videos/b.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p class="video-caption">(b) Flickering and growing artifacts appear due to interframe-compression.</p>
+            </div>
+            <div class="video-item">
+                <video class="video-canvas" id="video3" loop autoplay muted>
+                    <source src="media/videos/c.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p class="video-caption">(c) Lowering bitrate leads to a higher concentration of points.</p>
+            </div>
+            <div class="video-item">
+                <video class="video-canvas" id="video4" loop autoplay muted>
+                    <source src="media/videos/d.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p class="video-caption">(d) Increased latency observed when very-slow encoder preset is used.</p>
+            </div>
+        </div>
+
+        <!-- <h2 id="kinectvswebrtc">Kinect VS WebRTC</h2>
         <div class="button-container">
             <button id="btnColor" class="toggle-btn">Color</button>
             <button id="btnDepth" class="toggle-btn">Depth</button>
             <button id="btnPointCloud" class="toggle-btn" style="display: none;">Back</button>
         </div>
-
         <div class="canvas-grid">
             <div id="canvas1" class="canvas-container">
                 <div class="canvas-label">Kinect</div>
@@ -167,13 +198,7 @@ cmd = "gst-launch-1.0 fdsrc fd=0 \
             <div id="canvas2" class="canvas-container">
                 <div class="canvas-label">WebRTC</div>
             </div>
-            <div id="canvas3" class="canvas-container">
-                <div class="canvas-label">WebSocket</div>
-            </div>
-            <div id="canvas4" class="canvas-container">
-                <div class="canvas-label">WebRTC</div>
-            </div>
-        </div>
+        </div> -->
 
         <h2 id="references">References</h2>
         <p class="references">
