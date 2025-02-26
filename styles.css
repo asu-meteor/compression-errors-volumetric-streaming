@@ -342,6 +342,37 @@ h3 {
     right: 10px;
 }
 
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+.video-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.video-canvas {
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+    border: 1px solid #ccc;
+    background: #000;
+}
+
+.video-caption {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+    font-family: sans-serif;
+}
+
 .canvas-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
